@@ -13,10 +13,10 @@ public class Validator {
 	}
 	
 	public static boolean isSpecialChar(char inputChar, boolean argument) {
-		char[] acceptableValues = {'-','.'};
+		char[] acceptableValue = {'-','.'};
 		boolean isSpecialChar = false;
 		
-		for (char n: acceptableValues) {
+		for (char n: acceptableValue) {
 			if (n == inputChar) isSpecialChar = true;
 		}
 		
@@ -36,4 +36,5 @@ public class Validator {
 		boolean isDomainChar = (isSpecialChar(inputChar,false)||isAlphaNum(inputChar));
 		return isDomainChar;
 	}
-}
+} 
+//comments to come 
