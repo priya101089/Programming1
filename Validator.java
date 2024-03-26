@@ -3,15 +3,6 @@ public class Validator {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
-		boolean result_singleAtSign = singleAtSign("gmail.com");
-		System.out.println(result_singleAtSign);
-		
-		String stringFetchBeforeAt = fetchBeforeAt("ganeshsanthar@gmail.com");
-		System.out.println(stringFetchBeforeAt);
-		
-		String stringFetchAfterAt = fetchAfterAt("ganeshsanthar@gmail.com");
-		System.out.println(stringFetchAfterAt);
 	}
 
 	//creating a dummy method
