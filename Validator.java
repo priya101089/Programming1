@@ -5,7 +5,7 @@ public class Validator {
 		// TODO Auto-generated method stub
 	}
 
-	//creating a dummy method
+	
 	public static boolean isAlphaNum(char charToValidate) {
 		if((charToValidate >= 'a' && charToValidate <= 'z') || (charToValidate >= 'A' && charToValidate <= 'Z') || (charToValidate >= '0' && charToValidate <= '9')) {
 			return true;
@@ -39,7 +39,9 @@ public class Validator {
 	}
 	
 
-	
+	//Method to check if a String contain a single at sign (@)
+	//input : String to validate
+	//output : boolean true - only one @, false - 0 or >1
 	public static boolean singleAtSign(String stringToValidate) {
 		int count = 0;
 		for(int i=0; i<stringToValidate.length();i++) {
@@ -54,6 +56,9 @@ public class Validator {
 		
 	}
 	
+	//Method to get the beginning of an email address
+	//input : String to validate
+	//output : String containing the portion before the @ symbol.
 	public static String fetchBeforeAt(String stringToValidate) {
 		String stringBeforeAt = "";
 		for(int i=0; i<stringToValidate.length();i++) {
@@ -66,6 +71,9 @@ public class Validator {
 		return stringBeforeAt;
 	}
 	
+	//Method to get the ending of an email address.
+	//input : String to validate
+	//output : String containing the portion after the @ symbol.
 	public static String fetchAfterAt(String stringToValidate) {
 		String stringAfterAt = "";
 		boolean atFound = false;
@@ -85,7 +93,13 @@ public class Validator {
 		}
 		return stringAfterAt;
 	}
-	
+	//Method to check if the start of a String is a valid email prefix.
+	//input : String to validate
+	//output : true if the following conditions are met, false otherwise. 
+	/*Contains at least one character.
+	» Contains only alphanumeric characters, underscores (_), periods (.), and dashes (-).
+	» An underscore, period, or dash must always be followed by at least one alphanumeric characters.
+	» First character is alphanumeric*/
 	public static boolean isPrefix(String stringToValidate) {
 		
 		if(stringToValidate.length() == 0) {
@@ -109,24 +123,41 @@ public class Validator {
 		
 	}
 	
+	//Method to check if the end of a String is a valid email domain.
+	//input : String to validate
+	//output : true if the following conditions are met, false otherwise.
+	/*Made up of two portions separated by a period.
+	» First portion must start with an alphanumeric character.
+	» Second portion contains at least two characters.
+	» First portion contains only alphanumeric characters, periods, and dashes.
+	» A period or dash, in the first portion must be followed by one or more alphanumeric characters.
+	» The second portion contains only letters of the alphabet*/
 	public static boolean isDomain(String stringToValidate) {
 		String revFirstPortion="";
 		String revSecondPortion="";
 		String firstPortion="";
 		String secondPortion="";
+		boolean firstPortionFlag = false;
 		for(int i=(stringToValidate.length()-1); i>=0;i--) {
 			if((stringToValidate.charAt(i) == '.') && (stringToValidate.charAt(i-1) == '.')){
 				return false;
 			}else if((stringToValidate.charAt(i) == '.') && (isAlphaNum(stringToValidate.charAt(i-1)))){
-				revFirstPortion += stringToValidate.charAt(i);
+				firstPortionFlag = true;				
+				continue;
 			}else {
-				revSecondPortion += stringToValidate.charAt(i);
+				if(!firstPortionFlag) {
+					revSecondPortion += stringToValidate.charAt(i);
+				}
 			}
+			if(firstPortionFlag) {				
+				revFirstPortion += stringToValidate.charAt(i);
+			}
+			
 		}
-		for(int j=(revFirstPortion.length()-1); j>=0; j++) {
+		for(int j=(revFirstPortion.length()-1); j>=0; j--) {
 			firstPortion += revFirstPortion.charAt(j);
 		}
-		for(int k=(revSecondPortion.length()-1); k>=0; k++) {
+		for(int k=(revSecondPortion.length()-1); k>=0; k--) {
 			secondPortion += revSecondPortion.charAt(k);
 		}
 		if(!isAlphaNum(firstPortion.charAt(0))) {
@@ -151,6 +182,10 @@ public class Validator {
 			
 		return true;
 	}
+	
+	//Method to check if a string is a valid email address.
+	//input : String to validate
+	//output : true if the String is a valid email address which consists of a prefix, '@' symbol, and domain., false otherwise.
 	public static boolean isEmail(String stringToValidate) {
 		String emailPrefix = "";
 		String emailDomain = "";
@@ -168,15 +203,26 @@ public class Validator {
 		
 		return true;
 	}
+	
+	//Method to check if Strings contained in an array of String are valid email addresses.
+	//input : emails to validate
+	//output : array of Strings containing only the emails that are considered valid.
 	public static String[] validEmails(String[] emailsToValidate) {
-		String validEmails[] = {};
+		String tempValidEmails[] = new String[emailsToValidate.length];
 		int i=0;
 		for (String emailString: emailsToValidate) {
 			if(isEmail(emailString)) {
-				validEmails[i] = emailString;
+				tempValidEmails[i] = emailString;
 				i++;
 			}
-		}		
+		}	
+		String validEmails[] = new String[i];
+		for(int j=0; j<tempValidEmails.length; j++) {
+			if(tempValidEmails[j] == null) {
+				continue;
+			}
+			validEmails[j] = tempValidEmails[j];
+		}
 		return validEmails;
 	}
 	
