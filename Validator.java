@@ -163,23 +163,11 @@ public class Validator {
 	public static boolean isEmail(String stringToValidate) {
 		String emailPrefix = "";
 		String emailDomain = "";
-		boolean atFound = false;
 		if(!singleAtSign(stringToValidate)) {
 			return false;
 		}
-		for(int i=0; i<stringToValidate.length();i++) {			
-			if(stringToValidate.charAt(i) == '@') {
-				atFound = true;
-			}
-			if(!atFound)
-			{
-				emailPrefix += stringToValidate.charAt(i);
-			}else {
-				if(stringToValidate.charAt(i) != '@') {
-					emailDomain += stringToValidate.charAt(i);
-				}
-			}
-		}
+		emailPrefix = fetchBeforeAt(stringToValidate);
+		emailDomain = fetchAfterAt(stringToValidate);
 		if(!isPrefix(emailPrefix)) {
 			return false;
 		}
