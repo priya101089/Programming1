@@ -5,8 +5,39 @@ public class Validator {
 		// TODO Auto-generated method stub
 	}
 
+	//method to check if nothing gets repeated inside of a char array
+	public static boolean noRepeat(char[] input) {
+		
+		for (int i=0; i< input.length;i++) {
+			for (int a =0; a<input.length; a++) {
+				if (input[i] == input[a] && a!=i) return false; 
+			}
+		}
+		
+		return true;
+	}
+	
+	//method to chec if char array has at least one alphanum value 
+	public static boolean hasOneAlphaNum(char[] input) {
+		int counter = 0;
+		for (int i = 0; i<input.length;i++) 
+			if (isAlphaNum(input[i])) counter++;
+		
+		if(counter > 0) return true;
+		return false;
+	}
+
+	//method to check if a char after dot or dash is alphanumeric
+	public static boolean textAfterDot(char[] input) {
+		for(int i=0;i<input.length;i++) {
+			if(isSpecialChar(input[i],true)) {
+				if(isAlphaNum(input[i+1])) return true;
+			}
+		}
+	}
 	
 	public static boolean isAlphaNum(char charToValidate) {
+		//setting condition using char expressions
 		if((charToValidate >= 'a' && charToValidate <= 'z') || (charToValidate >= 'A' && charToValidate <= 'Z') || (charToValidate >= '0' && charToValidate <= '9')) {
 			return true;
 		}
@@ -14,9 +45,11 @@ public class Validator {
 	}
 	
 	public static boolean isSpecialChar(char inputChar, boolean argument) {
+		//setting a pool of acceptable values
 		char[] acceptableValue = {'-','.'};
 		boolean isSpecialChar = false;
 		
+		//iterating through loop to check for match between input and pool of accepted values
 		for (char n: acceptableValue) {
 			if (n == inputChar) isSpecialChar = true;
 		}
@@ -28,6 +61,7 @@ public class Validator {
 		return isSpecialChar;
 	}
 	
+	//combining alphanum and special char for the next two methods
 	public static boolean isPrefixChar(char inputChar) {
 		boolean isPrefixChar = (isSpecialChar(inputChar,true)||isAlphaNum(inputChar));
 		return isPrefixChar;
@@ -226,6 +260,117 @@ public class Validator {
 		return validEmails;
 	}
 	
+
+	public static String isUsername(String username) {
+		char[] usernameArr = username.toCharArray();
+		//initializing empty return from beginning
+		String lowcaseUsername = "";
+		
+		
+		boolean isSpecialChar = isSpecialChar(usernameArr[0],false);
+		//System.out.println(isSpecialChar); test
+		
+		boolean hasOneAlphaNum = hasOneAlphaNum(usernameArr);
+		//System.out.println(hasOneAlphaNum); test
+		boolean textAfterDot = textAfterDot(usernameArr)
+		
+		if (usernameArr.length >= 1 
+			&& usernameArr.length <=7 
+			&& isSpecialChar
+			&& noRepeat
+			&& hasOneAlphaNum
+			&& textAfterDot) {
+			//if statement code
+			for (int i = 0; i< usernameArr.length;i++) {
+				usernameArr[i] = Character.toLowerCase(usernameArr[i]);
+				if (usernameArr[i] == '-') usernameArr[i] = '_';
+				
+				if(!isPrefixChar(usernameArr[i]) )
+					lowcaseUsername = "";
+			}
+			
+			lowcaseUsername = String.valueOf(usernameArr);
+		}
+		
+		//this gets returned at the end
+		return lowcaseUsername;
+		
+	}
 	
+	public static boolean safePassword(String password) {
+		char[] passwordArr = password.toCharArray();
+		
+		boolean hasOneAlphaNum = hasOneAlphaNum(passwordArr);
+		boolean characterNum = (passwordArr.length >= 7 && passwordArr.length <= 15);
+		boolean noRepeat = noRepeat(passwordArr);
+		
+		int[] counters = new int[4];
+		boolean[] countersConditions = new boolean[4];
+		//0-upperCase, 1-lowerCase, 2-number, 3-isSpecialChar, 4-hasOneAlphaNum, 5-right amount o characters
+		
+		//checking all the conditions first
+		for (int i=0;i<passwordArr.length;i++) {
+			if (Character.isUpperCase(passwordArr[i]))
+				counters[0]++;
+			if (Character.isLowerCase(passwordArr[i]))
+				counters[1]++;
+			if (passwordArr[i] >= '0' && passwordArr[i] <='9')
+				counters[2]++;
+			if (isSpecialChar(passwordArr[i],true))
+				counters[3]++;
+		}
+		//if any counter is more than 0, the according condition is true
+		for (int a=0; a<counters.length;a++) {
+			if (counters[a] > 0) countersConditions[a] = true;
+			else if (counters[a] < 1) countersConditions[a] = false;
+		}
+		
+		if (countersConditions[0-3]
+				&& hasOneAlphaNum
+				&& noRepeat
+				&& characterNum) return true;
+		return false;
+	}
+	
+	public static String[] validUsernames(String[] toCheck) {
+		//initialize an array the same length as input 
+		String[] sortArr = new String[toCheck.length];
+		//initialize a counter, to know the amount of elements in final array
+		int counterArr = 0;
+		//iterating through the strings, every, string that isn't valid will automatically get converted into an empty one
+		for (int i =0;i<toCheck.length;i++) {
+			sortArr[i] = isUsername(toCheck[i]);
+			int length = sortArr[i].length();
+			if (length > 0) counterArr++;
+		}
+		
+		String[] output = new String[counterArr];
+		for(int j=0;j<output.length;j++) {
+			for (int a =0;a<sortArr.length;a++) {
+				if (sortArr[a].length()>0)sortArr[a]=output[j];
+			}			
+		}
+		return output;
+	}
+	
+	public static String[] validPasswords(String[] toCheck) {
+		//initialize an array the same length as input 
+		String[] sortArr = new String[toCheck.length];
+		//initialize a counter, to know the amount of elements in final array
+		int counterArr = 0;
+		
+		//iterating through the strings, every string that isnt a safe password will be eliminated
+		for (int i =0;i<toCheck.length;i++) {
+			if(safePassword(toCheck[i]))counterArr++;
+		}
+		
+		String[] output = new String[counterArr];
+		for(int j=0;j<output.length;j++) {
+			for (int a =0;a<sortArr.length;a++) {
+				if (sortArr[a].length()>0)sortArr[a]=output[j];
+			}			
+		}
+		return output;
+	}
 	
 }
