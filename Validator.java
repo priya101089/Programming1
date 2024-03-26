@@ -36,12 +36,10 @@ public class Validator {
 		boolean isDomainChar = (isSpecialChar(inputChar,false)||isAlphaNum(inputChar));
 		return isDomainChar;
 	}
-} 
-//comments to come 
 
 
 
-public static boolean singleAtSign(String stringToValidate) {
+	public static boolean singleAtSign(String stringToValidate) {
 		int count = 0;
 		for(int i=0; i<stringToValidate.length();i++) {
 			if(stringToValidate.charAt(i) == '@') {
@@ -187,5 +185,5 @@ public static boolean singleAtSign(String stringToValidate) {
 		}		
 		return validEmails;
 	}
-	
+}
 	
