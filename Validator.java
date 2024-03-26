@@ -3,13 +3,23 @@ public class Validator {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("hello world")
+		
+		boolean result_singleAtSign = singleAtSign("gmail.com");
+		System.out.println(result_singleAtSign);
+		
+		String stringFetchBeforeAt = fetchBeforeAt("ganeshsanthar@gmail.com");
+		System.out.println(stringFetchBeforeAt);
+		
+		String stringFetchAfterAt = fetchAfterAt("ganeshsanthar@gmail.com");
+		System.out.println(stringFetchAfterAt);
 	}
 
 	//creating a dummy method
-	public static boolean isAlphaNum(char inputChar) {
-		boolean isAlphaNum = ( Character.isLetter(inputChar) || Character.isDigit(inputChar));
-		return isAlphaNum;
+	public static boolean isAlphaNum(char charToValidate) {
+		if((charToValidate >= 'a' && charToValidate <= 'z') || (charToValidate >= 'A' && charToValidate <= 'Z') || (charToValidate >= '0' && charToValidate <= '9')) {
+			return true;
+		}
+		return false;
 	}
 	
 	public static boolean isSpecialChar(char inputChar, boolean argument) {
@@ -36,9 +46,9 @@ public class Validator {
 		boolean isDomainChar = (isSpecialChar(inputChar,false)||isAlphaNum(inputChar));
 		return isDomainChar;
 	}
+	
 
-
-
+	
 	public static boolean singleAtSign(String stringToValidate) {
 		int count = 0;
 		for(int i=0; i<stringToValidate.length();i++) {
@@ -50,6 +60,7 @@ public class Validator {
 			return true;
 		}
 		return false;
+		
 	}
 	
 	public static String fetchBeforeAt(String stringToValidate) {
@@ -102,7 +113,9 @@ public class Validator {
 				}
 			}
 		}
+
 		return true;
+		
 	}
 	
 	public static boolean isDomain(String stringToValidate) {
@@ -143,7 +156,8 @@ public class Validator {
 			if(!(secondPortion.charAt(x) >= 'a' && secondPortion.charAt(x) <= 'z') && !(secondPortion.charAt(x) >= 'A' && secondPortion.charAt(x) <= 'Z')) {
 				return false;
 			}
-		}	
+		}
+			
 		return true;
 	}
 	public static boolean isEmail(String stringToValidate) {
@@ -161,8 +175,8 @@ public class Validator {
 			{
 				emailPrefix += stringToValidate.charAt(i);
 			}else {
-				if(stringToValidate.charAt(i) == '@') {
-				emailDomain += stringToValidate.charAt(i);
+				if(stringToValidate.charAt(i) != '@') {
+					emailDomain += stringToValidate.charAt(i);
 				}
 			}
 		}
@@ -172,6 +186,7 @@ public class Validator {
 		if(!isDomain(emailDomain)) {
 			return false;
 		}
+		
 		return true;
 	}
 	public static String[] validEmails(String[] emailsToValidate) {
@@ -185,5 +200,7 @@ public class Validator {
 		}		
 		return validEmails;
 	}
-}
 	
+	
+	
+}
